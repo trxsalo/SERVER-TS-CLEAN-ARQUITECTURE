@@ -1,0 +1,36 @@
+### Ruta 1: Obtener repuesta ###
+GET http://localhost:4000/
+
+
+##Auth
+### Ruta 1:  realizar login ###
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+{
+  "name": "Jane_Doe",
+  "email": "jane@example.com",
+  "password":"1234433",
+}
+
+### Post ###
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+{
+  "name": "Jane_Doe",
+  "email": "jane@example.com",
+  "password":"1234433",
+}
+
+
+### Ruta 2:  realizar register ###
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+{
+  "name": "Jane_Doe",
+  "email": "jane@example.com",
+  "password":"1234433",
+}
+
+### Ruta 3: Delete User ###
+GET http://localhost:4000/api/auth/user
+
