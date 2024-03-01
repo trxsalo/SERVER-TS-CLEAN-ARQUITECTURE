@@ -7,8 +7,8 @@ export class CRoutes{
     static get route():Router{
         const route:Router =Router()
         route.use('/:lang/api/auth', (req:Request,res:Response)=>{
-            const lng:string  = req.params.lang.toUpperCase();
-            GlobalVariables.Setlang(lng);
+            const lng:string  = req.params.lang.toString().toUpperCase();
+            GlobalVariables.lang = lng;
             CAuthRoutes.routes
         });
         return  route;

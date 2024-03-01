@@ -2,17 +2,21 @@
 // EN ESTA CLASE ESTARE MANIPULADO VARIBLES GLOBALES
 // LOS CUALES SUS DATOS CAMBIARIAN DINAMICAMENTE DEPENDIENDO DEL USUARIO
 // U OTROS CASOS
-import {LANGUAGES} from "../language/CTraslate";
+import {CTraslate, LANGUAGES} from "../language/CTraslate";
 
 
 export  class  GlobalVariables{
-    public static lang: LANGUAGES = 'ES';
+    private static _lang: LANGUAGES = 'ES';
+    static get lang(): LANGUAGES {
+        return this._lang;
+    }
 
-    static  Getlang():LANGUAGES{
-        return this.lang
+    static set lang(value: any) {
+        if (CTraslate.verifier(value)) {
+            this._lang = value;
+        } else {
+            throw new Error('Invalid language code');
+        }
     }
-    static  Setlang(lng:any){
-        const l:LANGUAGES = lng;
-        this.lang = l;
-    }
+
 }
