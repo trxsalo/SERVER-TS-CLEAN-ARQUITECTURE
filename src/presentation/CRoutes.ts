@@ -1,11 +1,16 @@
+
 import {Router,Request,Response} from "express";
 import {CAuthRoutes} from "./auth/CAuthRoutes";
-
+import {GlobalVariables} from '../config/GlobalVariables';
 export class CRoutes{
 
     static get route():Router{
         const route:Router =Router()
-        route.use('/api/auth',CAuthRoutes.routes );
+        route.use('/:lang/api/auth', (req:Request,res:Response)=>{
+            const lng:string  = req.params.lang.toUpperCase();
+            GlobalVariables.Setlang(lng);
+            CAuthRoutes.routes
+        });
         return  route;
     }
 }

@@ -2,11 +2,11 @@
 export const langEs:{[key:string]:string} = {
     //Message de Errors
     "Error":"Error",
-    "ErrElement": "Elemento no encontrado",
-    "ErrUndefine": "El elemento no está definido",
-    "ErrValue": "El elemento no tiene un valor",
-    "ErrValues": "El array no tiene valores",
-    "ErrSearch": "No se encontró el valor buscado",
+    "ErrorElement": "Elemento no encontrado",
+    "ErrorUndefine": "El elemento no está definido",
+    "ErrorValue": "El elemento no tiene un valor",
+    "ErrorValues": "El array no tiene valores",
+    "ErrorSearch": "No se encontró el valor buscado",
 
 //Mensaje correcto,
     "OkConnect": "Conexión estable",
@@ -29,7 +29,14 @@ export const langEs:{[key:string]:string} = {
     "OkArray": "El valor ingresado es de tipo Array",
 
 //Function Errors
-    "ErrorFunctionUndefine": "La función no ha sido definida"
+    "ErrorFunctionUndefine": "La función no ha sido definida",
+
+// User Message
+    "ErrorPassword":"Contraseña Inconrrecta",
+    "ErrorEmail":"Contraseña Inconrrecta",
+    "ErrorUser":"Contraseña Inconrrecta",
+    "ErrorSearchUser":"Usuario no encontrado Inconrrecta",
+
 
 
 }

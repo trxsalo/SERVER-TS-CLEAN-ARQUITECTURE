@@ -1,11 +1,11 @@
 
 export  const langEn:{[key:string]:string} = {
     "Error": "Error",
-    "ErrElement": "Element not found",
-    "ErrUndefine": "Element is not defined",
-    "ErrValue": "The element does not have a value",
-    "ErrValues": "The array has no values",
-    "ErrSearch": "The searched value was not found",
+    "ErrorElement": "Element not found",
+    "ErrorUndefine": "Element is not defined",
+    "ErrorValue": "The element does not have a value",
+    "ErrorValues": "The array has no values",
+    "ErrorSearch": "The searched value was not found",
 
 //successful message,
     "OkConnect": "Connection is stable",

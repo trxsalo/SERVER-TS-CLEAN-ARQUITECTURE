@@ -3,21 +3,23 @@ import {langEn} from './language-en'
 import {langEs} from "./languaje-es-mx";
 
 interface Languajes{
-    ES:{[key:string]:string},
-    ENG:{[key:string]:string}
+    "ES":{[key:string]:string},
+    "ENG":{[key:string]:string}
 }
 
 const traslation:Languajes= {
-    ES : langEs, //Castellano
-    ENG: langEn //Ingles
+    'ES' : langEs, //Castellano
+    'ENG': langEn //Ingles
 }
 
-type LANG  = 'ES' | 'ENG';
+//IDIOMAS QUE TIENE SOPORTE
+export type LANGUAGES  = 'ES' | 'ENG' ;
 
 export class CTraslate{
-    static  languages:Languajes = traslation;
 
-    static traslate(lang:LANG,key:string):string{
+    static readonly languages:Languajes = traslation;
+    static traslate(lang:LANGUAGES,key:string):string{
+        //VERIFICAMOS SI ES EL IDIOMA ESTA DISPONIBLE
         if (this.languages[lang]) {
             return this.languages[lang][key];
         } else {

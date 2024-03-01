@@ -1,7 +1,12 @@
 import {CAuthDatasource, CLoginDto, CRegisterUserDto, CUserEntity} from "../../domain";
 import {CError} from "../../config";
+import {CTraslate, LANGUAGES} from "../../language/CTraslate";
+
+import {GlobalVariables} from "../../config";
 
 export class CAuthDatasourceMongoImpl implements CAuthDatasource {
+
+    private  readonly lng = GlobalVariables.Getlang();
     async login(login: CLoginDto): Promise<CUserEntity> {
         const {password,email}:CLoginDto = login
         try {
@@ -9,7 +14,7 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
             //Vericar passsword
             //Asignarle un token?
 
-
+            if(password != '123444')  throw CError.BadRequest(CTraslate.traslate(this.lng,'ErrorPassword'))
 
             return  new CUserEntity(
                 1,
@@ -27,10 +32,11 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
     }
 
      async register(register: CRegisterUserDto): Promise<CUserEntity> {
+
         const {name,password,email }: CRegisterUserDto = register;
         try {
             //1 Verificar correo
-            if(email == 'marcos@gmail.com') throw CError.BadRequest('Correo Ya exitente')
+            if(email == 'marcos@gmail.com') throw CError.BadRequest(CTraslate.traslate('ES','ErrorEmail'))
             //2 hash pasword
             //3 mapear res
 
