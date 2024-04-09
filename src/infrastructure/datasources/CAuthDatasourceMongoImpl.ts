@@ -1,3 +1,4 @@
+import {userModel} from '../../data/'
 import {CAuthDatasource, CLoginDto, CRegisterUserDto, CUserEntity} from "../../domain";
 import {CError} from "../../config";
 import {CTraslate, LANGUAGES} from "../../language/CTraslate";
@@ -30,24 +31,29 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
         }
 
     }
-
      async register(register: CRegisterUserDto): Promise<CUserEntity> {
 
         const {name,password,email }: CRegisterUserDto = register;
         try {
-            //1 Verificar correo
-            if(email == 'marcos@gmail.com') throw CError.BadRequest(CTraslate.Translate('ES','ErrorEmail'))
-            //2 hash pasword
-            //3 mapear res
+            const exists = await userModel.findOne({email: email});
+            if(exists)throw CError.BadRequest('Mail Exists');
+            //todo: hash pasword
 
+            //Creando usuarios
+            const user = new userModel({
+                name,
+                email,
+                password
+            });
+            const savedUser = await user.save();
+            //Todo: Mappear la respuestas
              return  new CUserEntity(
-                1,
-                "Marcos Salomon",
-                "222221ssf",
-                'ssss',
-                ['00000','0001'],
-                "marcos@loras.trx"
-            )
+                 user.id,
+                 user.name,
+                 user.email,
+                 user.password,
+                 user.roles
+            );
         }catch (e){
             if(e instanceof CError) throw e;
             throw CError.InternalServerError();
