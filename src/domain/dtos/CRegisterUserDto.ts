@@ -27,7 +27,7 @@ export class CRegisterUserDto {
                name,
                email.toLowerCase(),
                password
-           )
+           ),
        ];
     }
 }

@@ -4,6 +4,7 @@ import {CError} from "../../config";
 import {CTraslate, LANGUAGES} from "../../language/CTraslate";
 
 import {GlobalVariables} from "../../config";
+import {CUserMappers} from "../mappers/CUserMappers";
 
 export class CAuthDatasourceMongoImpl implements CAuthDatasource {
 
@@ -31,12 +32,11 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
         }
 
     }
-     async register(register: CRegisterUserDto): Promise<CUserEntity> {
-
+    async register(register: CRegisterUserDto): Promise<CUserEntity> {
         const {name,password,email }: CRegisterUserDto = register;
         try {
             const exists = await userModel.findOne({email: email});
-            if(exists)throw CError.BadRequest('Mail Exists');
+            if(exists) throw CError.BadRequest('Mail Exists');
             //todo: hash pasword
 
             //Creando usuarios
@@ -46,19 +46,16 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
                 password
             });
             const savedUser = await user.save();
-            //Todo: Mappear la respuestas
-             return  new CUserEntity(
-                 user.id,
-                 user.name,
-                 user.email,
-                 user.password,
-                 user.roles
-            );
+
+            const saveU =  CUserMappers.userEntityFromObject(savedUser);
+            console.log(saveU);
+
+            return saveU;
+
         }catch (e){
             if(e instanceof CError) throw e;
             throw CError.InternalServerError();
         }
 
     }
-
 }
