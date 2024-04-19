@@ -1,8 +1,9 @@
 import {Request, Response} from "express";
-import {CAuthRepositori, CRegisterUserDto, CUserEntity} from "../../domain";
+import {CAuthRepositori, CRegisterUserDto, CRegisterUserUseCaseImp, CUserEntity} from "../../domain";
 import {CError, CJwtAdapter} from "../../config";
 import {userModel} from "../../data";
 import {CUserMappers} from "../../infrastructure/mappers/CUserMappers";
+import {CErrorResponse} from "../../config/CErrorResponse";
 
 export class CAuthControllers {
 
@@ -10,16 +11,7 @@ export class CAuthControllers {
         private readonly authRepository: CAuthRepositori,
     ) {}
 
-    private handleError = (error:unknown, res:Response)=>{
-        if(error instanceof CError){
-            return res.status(error.statusCode).send({error:error.message});
-        }
-        console.log({
-            error
-        });
 
-        return  res.status(500).json({error:"Internal Server Error"});
-    }
 
     login = (req:Request,res:Response)=> {
         const body = req.body
@@ -31,23 +23,14 @@ export class CAuthControllers {
             const body = req.body
             const [error,user] = CRegisterUserDto.createUser(body);
             if (error) res.status(400).json(error);
-            const register:CUserEntity  = await this.authRepository.register(user!);
-            return  res.status(200).json({
-                user:register,
-                token:{
-                    payload: await CJwtAdapter.genereteToken({
-                        _payload:{
-                            user:register.email,
-                            id:register.id,
-                            name:register.name,
-                        },
-                        _duration:'2h'
-                    }),
-                }
-            });
+
+            const Register:CRegisterUserUseCaseImp = new CRegisterUserUseCaseImp(this.authRepository);
+            const newRegister = await Register.execute(user!)
+
+            return res.status(201).json(newRegister);
 
         }catch(err){
-            return this.handleError(err, res)
+            return CErrorResponse.handleError(err, res)
         }
 
     }
@@ -62,20 +45,19 @@ export class CAuthControllers {
             return res.status(200).json({userEntity});
 
         }catch(err){
-            return this.handleError(err, res);
+            return CErrorResponse.handleError(err, res);
         }
 
     }
 
     getusers = async (req:Request,res:Response)=>{
         try {
-            const {id} = req.body
             const user = await userModel.find();
             if(!user) throw CError.BadRequest('Users not found');
-            return res.status(200).json({user});
+            return res.status(200).json({user,token:req.body.payload});
 
         }catch(err){
-            return this.handleError(err, res);
+            return CErrorResponse.handleError(err, res);
         }
 
     }

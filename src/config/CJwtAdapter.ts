@@ -23,4 +23,15 @@ export class CJwtAdapter {
         });
 
     }
+
+    static async validateToken(token:string){
+        return new Promise((resolve) => {
+                jwt.verify(token,
+                    envs.JWT_SEMILLA,
+                    (err, decode) => {
+                        if (err) return  resolve(null);
+                        resolve(decode as string);
+                });
+        })
+    }
 }
