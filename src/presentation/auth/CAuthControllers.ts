@@ -1,9 +1,13 @@
+
 import {Request, Response} from "express";
-import {CAuthRepositori, CRegisterUserDto, CRegisterUserUseCaseImp, CUserEntity} from "../../domain";
-import {CError, CJwtAdapter} from "../../config";
-import {userModel} from "../../data";
-import {CUserMappers} from "../../infrastructure/mappers/CUserMappers";
-import {CErrorResponse} from "../../config/CErrorResponse";
+import {CErrorResponse} from "../../config/";
+import {CAuthRepositori,
+        CLoginDto,
+        CRegisterUserDto,
+        CRegisterUserUseCaseImp,
+        CLoginUserCaseImpl} from "../../domain";
+
+
 
 export class CAuthControllers {
 
@@ -13,21 +17,34 @@ export class CAuthControllers {
 
 
 
-    login = (req:Request,res:Response)=> {
+    login = async (req:Request,res:Response)=> {
         const body = req.body
-        console.log(body)
-        return res.status(200).json(body);
+        try {
+            const [error,user] = CLoginDto.loginuser(body);
+            if (error){
+                res.status(400).json(error)
+            }else{
+                const login  = new CLoginUserCaseImpl(this.authRepository );
+                const newLogin = await login.execute(user!);
+                return res.status(200).json(newLogin);
+            }
+        }
+        catch(err){
+            return CErrorResponse.handleError(err, res)
+        }
+
     }
     register = async (req:Request,res:Response)=>{
         try {
             const body = req.body
             const [error,user] = CRegisterUserDto.createUser(body);
-            if (error) res.status(400).json(error);
-
-            const Register:CRegisterUserUseCaseImp = new CRegisterUserUseCaseImp(this.authRepository);
-            const newRegister = await Register.execute(user!)
-
-            return res.status(201).json(newRegister);
+            if (error){
+                res.status(400).json(error)
+            }else{
+                const Register:CRegisterUserUseCaseImp = new CRegisterUserUseCaseImp(this.authRepository);
+                const newRegister = await Register.execute(user!)
+                return res.status(201).json(newRegister);
+            }
 
         }catch(err){
             return CErrorResponse.handleError(err, res)
@@ -35,32 +52,6 @@ export class CAuthControllers {
 
     }
 
-    getuser = async (req:Request,res:Response)=>{
-        try {
-            const {id} = req.body
-            const user = await userModel.findById(id);
-            if(!user) throw CError.BadRequest('User not found');
-            console.log(user);
-            const userEntity = CUserMappers.userEntityFromObject(user);
-            return res.status(200).json({userEntity});
-
-        }catch(err){
-            return CErrorResponse.handleError(err, res);
-        }
-
-    }
-
-    getusers = async (req:Request,res:Response)=>{
-        try {
-            const user = await userModel.find();
-            if(!user) throw CError.BadRequest('Users not found');
-            return res.status(200).json({user,token:req.body.payload});
-
-        }catch(err){
-            return CErrorResponse.handleError(err, res);
-        }
-
-    }
 }
 
 //En lo controladore se recomida usar un clase para realizar la logica de los casos de usos,

@@ -1,31 +1,36 @@
 import {userModel} from '../../data/'
 import {CAuthDatasource, CLoginDto, CRegisterUserDto, CUserEntity} from "../../domain";
-import {CError} from "../../config";
-import {CTraslate, LANGUAGES} from "../../language/CTraslate";
+import {BcryptAdapter, CError, GlobalVariables} from "../../config";
+import {CUserMappers} from "../index";
 
-import {GlobalVariables} from "../../config";
-import {CUserMappers} from "../mappers/CUserMappers";
+type HashFunction = (password: string) => string;
+type CompareFunction = (password: string, hashed: string) => boolean;
+
 
 export class CAuthDatasourceMongoImpl implements CAuthDatasource {
 
     private  readonly lng = GlobalVariables.lang;
+
+
+    constructor(
+        private readonly hashPassword:HashFunction = BcryptAdapter.hash,
+        private readonly comparePassword:CompareFunction = BcryptAdapter.compare,
+    ) {}
+
+
     async login(login: CLoginDto): Promise<CUserEntity> {
         const {password,email}:CLoginDto = login
         try {
             //Verficar si exite el usario
+            const user = await userModel.findOne({ email });//buscamos usario por correo
+            if(!user) throw CError.BadRequest('User is not correct');
             //Vericar passsword
-            //Asignarle un token?
+            const isMatching = this.comparePassword(password, user.password);
+            if ( !isMatching ) throw CError.BadRequest('Password is not valid');
 
-            if(password != '123444')  throw CError.BadRequest(CTraslate.Translate(this.lng,'ErrorPassword'))
+            //Mapeamos el resultado, y los devolvemos
+            return CUserMappers.userEntityFromObject(user);
 
-            return  new CUserEntity(
-                1,
-                "Marcos Salomon",
-                "222221ssf",
-                'ssss',
-                ['00000','0001'],
-                "marcos@loras.trx"
-            )
         }catch (e){
             if(e instanceof CError) throw e;
             throw CError.InternalServerError();
@@ -37,13 +42,12 @@ export class CAuthDatasourceMongoImpl implements CAuthDatasource {
         try {
             const exists = await userModel.findOne({email: email});
             if(exists) throw CError.BadRequest('Mail Exists');
-            //todo: hash pasword
 
             //Creando usuarios
             const user = new userModel({
                 name,
                 email,
-                password
+                password:this.hashPassword(password)
             });
             const savedUser = await user.save();
 

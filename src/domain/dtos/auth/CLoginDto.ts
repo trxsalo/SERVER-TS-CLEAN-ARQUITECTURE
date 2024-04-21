@@ -1,7 +1,7 @@
 /**
  *  En los dtos, solo se especifica los campos con lo que utilizara, solo esos.
  */
-import {CValidators} from "../../config";
+import {CValidators} from "../../../config";
 
 
 export class CLoginDto {
@@ -10,10 +10,10 @@ export class CLoginDto {
         public password:string,
     ) {}
 
-    static createUser(json:{[key:string]:any}):[string?,CLoginDto?]{
+    static loginuser(json:{[key:string]:any}):[string?,CLoginDto?]{
         const {email,password} = json;
-        if(!password) return [ 'Missing name'];
         if(!email) return [ 'Missing email'];
+        if(!password) return [ 'Missing password'];
         if(!CValidators.password.test(password)) return ["Password is not a valid expression, characters greater than 4 and max. 16."]
 
 

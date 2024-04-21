@@ -1,36 +1,34 @@
 ### Ruta 1: Obtener repuesta ###
-GET http://localhost:4000/
-
+GET http://localhost:5000/
 
 ##Auth
-### Ruta 1:  realizar login ###
-POST http://localhost:4000/api/auth/login
+### Ruta 1: realizar login
+POST http://localhost:5000/api/auth/login
 Content-Type: application/json
+
 {
-  "name": "Jane_Doe",
-  "email": "jane@example.com",
-  "password":"1234433",
+  "email": "ejemplo_usuario",
+  "password": "ejemplo_contraseña"
 }
 
-### Post ###
+
+### Ruta 2: realizar registro
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
+
 {
-  "name": "Jane_Doe",
-  "email": "jane@example.com",
-  "password":"1234433",
+  "email": "marcz@tsm.com",
+  "name": "mtrxssalo12",
+  "password": "marcos@31103"
 }
 
 
-### Ruta 2:  realizar register ###
-POST http://localhost:4000/api/auth/login
-Content-Type: application/json
-{
-  "name": "Jane_Doe",
-  "email": "jane@example.com",
-  "password":"1234433",
-}
+### Rutas para obtener los usuarios
+### Ruta 1: Obtner un usuario por id
+GET http://localhost:5000/api/get/user/66247efcc454296122dafc03
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjQ3ZWZjYzQ1NDI5NjEyMmRhZmMwMyIsImlhdCI6MTcxMzY2NzgzNywiZXhwIjoxNzEzNjc1MDM3fQ.HsRMH4pETxB8jsiZ_Q-7Lj9mQWo-aH--k6rMf5JUCSY
 
-### Ruta 3: Delete User ###
-GET http://localhost:4000/api/auth/user
 
+### Ruta 2: Obtner todos los usuarios
+GET http://localhost:5000/api/get/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjQ3ZWZjYzQ1NDI5NjEyMmRhZmMwMyIsImlhdCI6MTcxMzY2NzgzNywiZXhwIjoxNzEzNjc1MDM3fQ.HsRMH4pETxB8jsiZ_Q-7Lj9mQWo-aH--k6rMf5JUCSY

@@ -1,4 +1,4 @@
-import {CRegisterUserDto} from "../../dtos/CRegisterUserDto";
+import {CRegisterUserDto} from "../../dtos/auth/CRegisterUserDto";
 import {CAuthRepositori} from "../../repositories/CAuthRepositori";
 import {CError, CJwtAdapter} from "../../../config";
 
@@ -13,8 +13,6 @@ interface token {
     token:string,
     user:{
         id:string
-        name:string,
-        email:string
     }
 }
 
@@ -42,8 +40,6 @@ export class CRegisterUserUseCaseImp implements RegisterUserUseCase {
             token:jwt,
             user:{
                 id:user.id,
-                name:user.name,
-                email:user.email
             }
         }
     }

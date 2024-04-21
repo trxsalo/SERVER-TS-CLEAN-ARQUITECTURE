@@ -1,7 +1,7 @@
 /**
  *  En los dtos, solo se especifica los campos con lo que utilizara, solo esos.
  */
-import {CValidators,BcryptAdapter} from "../../config";
+import {CValidators} from "../../../config";
 
 
 export class CRegisterUserDto {
@@ -26,7 +26,7 @@ export class CRegisterUserDto {
            new CRegisterUserDto(
                name,
                email.toLowerCase(),
-               BcryptAdapter.hash(password)
+               password
            ),
        ];
     }

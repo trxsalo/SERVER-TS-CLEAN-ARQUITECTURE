@@ -5,5 +5,5 @@ export abstract class CAuthDatasource{
 
     abstract login(login:CLoginDto):Promise<CUserEntity>
     
-    abstract register(register: CRegisterUserDto):Promise<CUserEntity>
+    abstract register(register: CRegisterUserDto):Promise<any>
 }
